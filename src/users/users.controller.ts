@@ -3,6 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetUserQuery } from './cqrs/queries/get-user.query';
 import { UpdateUserCommand } from './cqrs/commands/update-user.command';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SearchUsersQuery } from './cqrs/queries/search-users.query';
+import { DeleteUserCommand } from './cqrs/commands/delete-user.command';
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +12,7 @@ export class UsersController {
 
   @Get(':id')
   async getPublic(@Param('id') id: string) {
-    return this.queryBus.execute(new GetUserQuery(+id, false));
+    return this.queryBus.execute(new GetUserQuery(id, false));
   }
 
   @Get('me')
@@ -30,6 +32,6 @@ export class UsersController {
 
   @Get()
   async search(@Query('username') username: string) {
-    return this.queryBus.execute(new SearchUserQuery(username));
+    return this.queryBus.execute(new SearchUsersQuery(username));
   }
 }
