@@ -5,10 +5,12 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
 import { RedisService } from './redis/redis.service';
 import { AuditService } from './audit/audit.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot()],
+    ConfigModule.forRoot(),
+    UsersModule],
   controllers: [AppController],
   providers: [
     AppService,
