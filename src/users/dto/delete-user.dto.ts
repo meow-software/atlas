@@ -1,9 +1,7 @@
 
 import * as lib from 'src/lib';
 import { IsString, Length } from 'class-validator';
+import { SnowflakeDto } from './snowflake-abstract.dto';
 
-export class DeleteUserDto {
-    @IsString()
-    @Length(18)
-    id: lib.Snowflake;
+export class DeleteUserDto extends SnowflakeDto{
 }

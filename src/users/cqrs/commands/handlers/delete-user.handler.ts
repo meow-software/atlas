@@ -1,7 +1,7 @@
 
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as eventBusInterface from 'src/event-bus/event-bus.interface';
+import * as eventBusInterface from 'src/lib';
 import { DeleteUserCommand } from '../delete-user.command';
 
 @CommandHandler(DeleteUserCommand)

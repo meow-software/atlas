@@ -3,7 +3,7 @@ import { UpdateUserCommand } from '../update-user.command';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisService } from 'src/redis/redis.service';
 import { Inject } from '@nestjs/common';
-import * as eventBusInterface from 'src/event-bus/event-bus.interface';
+import * as eventBusInterface from 'src/lib';
 import { AuditService } from 'src/audit/audit.service';
 
 @CommandHandler(UpdateUserCommand)
