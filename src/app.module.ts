@@ -6,11 +6,13 @@ import { PrismaService } from './prisma/prisma.service';
 import { RedisService } from './redis/redis.service';
 import { AuditService } from './audit/audit.service';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    UsersModule],
+    UsersModule,
+    AuthModule],
   controllers: [AppController],
   providers: [
     AppService,

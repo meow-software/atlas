@@ -1,5 +1,5 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
-import { IEventBus } from './event-bus.interface';
+import { IEventBus } from 'src/lib';
 import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()

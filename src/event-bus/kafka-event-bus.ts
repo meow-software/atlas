@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IEventBus } from './event-bus.interface';
+import { IEventBus } from 'src/lib';
 // import { Kafka } from 'kafkajs';
 
 @Injectable()
