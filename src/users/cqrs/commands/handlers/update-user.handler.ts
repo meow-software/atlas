@@ -4,7 +4,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisService } from 'src/redis/redis.service';
 import { Inject } from '@nestjs/common';
 import * as eventBusInterface from 'src/lib';
-import { AuditService } from 'src/audit/audit.service';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
@@ -13,7 +12,6 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
     private prisma: PrismaService,
     private redis: RedisService,
     @Inject(eventBusInterface.IEventBusToken) private eventBus: eventBusInterface.IEventBus,
-    private audit: AuditService,
   ) {}
 
   async execute(command: UpdateUserCommand) {

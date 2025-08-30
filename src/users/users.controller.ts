@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Patch, Body, Delete, Req, Query, Post, Inject } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Patch, Body, Delete, Req, Query, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetUserQuery } from './cqrs/queries/get-user.query';
 import { UpdateUserCommand } from './cqrs/commands/update-user.command';

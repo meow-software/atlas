@@ -6,10 +6,26 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       BigInt   @id
+  username String   @unique
+  password String   @unique
+  email    String?
+  isBot    Boolean  @default(false)
+
+  bot Bot?
+}
+
+model Bot {
+  id    BigInt @id
+  token String
+
+  user  User   @relation(fields: [id], references: [id])
 }
