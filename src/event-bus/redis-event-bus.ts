@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { IEventBus } from 'src/lib';
-import { RedisService } from 'src/redis/redis.service';
+import { RedisService } from 'src/services/redis.service';
 
 @Injectable()
 export class RedisEventBus implements IEventBus, OnModuleDestroy {

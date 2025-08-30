@@ -1,13 +1,19 @@
 
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/services/prisma.service';
 import { CreateUserCommand } from '../create-user.command';
 import * as eventBusInterface from 'src/lib';
-import { ConflictException } from '@nestjs/common';
+import { SnowflakeService } from 'src/services/snowflake.service';
+import { EVENT_BUS } from 'src/event-bus/event-bus.module';
+import { Inject } from '@nestjs/common';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
-  constructor(private prisma: PrismaService, private eventBus: eventBusInterface.IEventBus) {}
+  constructor(
+    private prisma: PrismaService, 
+    private snowflake: SnowflakeService,
+    @Inject(EVENT_BUS) private eventBus: eventBusInterface.IEventBus
+    ) {}
 
   async execute(command: CreateUserCommand) {
     // let user = await  this.prisma.user.findUnique({ where: { email : command.email } });
@@ -16,6 +22,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     // can be create
     let user = await this.prisma.user.create({
       data: {
+        id: this.snowflake.generate(),
         username: command.username,
         email: command.email,
         password: command.password,

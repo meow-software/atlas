@@ -115,4 +115,56 @@ export class SnowflakeGenerator extends AbstractSnowflakeGenerator {
             offset: this.epoch,
         });
     }
+    /**
+    * Generates a new Snowflake ID and returns it as a string (API-friendly).
+    * @returns the ID as a string.
+    */
+    generateAsString(): string {
+        return this.generate().toString();
+    }
+    
+    /**
+    * Converts a bigint to a string.
+    * @param id Snowflake to a bigint.
+    */
+    toString(id: bigint): string {
+        return id.toString();
+    }
+
+    /**
+    * Converts a string to a bigint.
+    * @param id Snowflake to a string.
+    */
+    toBigInt(id: string): bigint {
+        return BigInt(id);
+    }
+
+    /**
+    * Extracts the data encoded in a snowflake.
+    * Classic Discord/Twitter format:
+    * - 41 bits = timestamp since epoch
+    * - 10 bits = workerId
+    * - 12 bits = increment (sequence)
+    */
+    deconstruct(id: bigint) {
+        const epoch = this.epoch; // get your epoch 
+        const binary = id.toString(2).padStart(64, '0');
+
+        // Bit splitting 
+        const timestampBits = binary.substring(0, 41);
+        const workerBits = binary.substring(41, 51);
+        const sequenceBits = binary.substring(51);
+
+        const timestamp = parseInt(timestampBits, 2) + epoch;
+        const workerId = parseInt(workerBits, 2);
+        const sequence = parseInt(sequenceBits, 2);
+
+        return {
+            id: id.toString(),
+            timestamp,
+            workerId,
+            sequence,
+            date: new Date(timestamp),
+        };
+    }
 }
