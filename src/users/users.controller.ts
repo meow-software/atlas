@@ -39,27 +39,24 @@ export class UsersController {
     @UseGuards(JwtAuthGuard)
     @Patch('me')
     async patchMe(@Req() req, @Body() dto: UpdateUserDto) {
-        // Todo use guard, jwt redis for get id
         return this.commandBus.execute(new UpdateUserCommand(req.user.id, dto));
-    }
-
-    @Get(':id')
-    async getPublic(@Param('id') id: string) {
-        return this.queryBus.execute(new GetUserQuery(id, false));
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('me')
     async deleteMe(@Req() req) {
-        // Todo use guard, jwt redis for get id
         return this.commandBus.execute(new DeleteUserCommand(req.user.id));
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('me')
     async getMe(@Req() req) {
-        // Todo use guard, jwt redis for get id
         return this.queryBus.execute(new GetUserQuery(req.user.id, true));
+    }
+
+    @Get(':id')
+    async getPublic(@Param('id') id: string) {
+        return this.queryBus.execute(new GetUserQuery(id, false));
     }
 
     @Get()

@@ -7,6 +7,11 @@ import { GetUserHandler } from './cqrs/queries/handler/get-user.handler';
 import { SnowflakeService } from 'src/services/snowflake.service';
 import { EventBusModule } from 'src/event-bus/event-bus.module';
 import { CqrsModule } from '@nestjs/cqrs';
+import { CreateUserHandler } from './cqrs/commands/handlers/create-user.handler';
+import { DeleteUserHandler } from './cqrs/commands/handlers/delete-user.handler';
+import { CheckLoginBotHandler } from './cqrs/queries/handler/check-login-bot.handler';
+import { CheckLoginHandler } from './cqrs/queries/handler/check-login.handler';
+import { SearchUsersHandler } from './cqrs/queries/handler/search-users.handler';
 
 @Module({
   imports: [
@@ -20,6 +25,16 @@ import { CqrsModule } from '@nestjs/cqrs';
     SnowflakeService,
     UpdateUserHandler,
     GetUserHandler,
+    // CQRS
+    // Commands
+    CreateUserHandler,
+    DeleteUserHandler,
+    UpdateUserHandler,
+    // Queries
+    CheckLoginBotHandler,
+    CheckLoginHandler,
+    GetUserHandler,
+    SearchUsersHandler
   ]
 })
 export class UsersModule {}
