@@ -17,7 +17,7 @@ model User {
   id       BigInt   @id
   username String   @unique
   password String   @unique
-  email    String?
+  email    String   @unique
   isBot    Boolean  @default(false)
 
   bot Bot?

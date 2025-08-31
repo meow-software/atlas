@@ -5,32 +5,39 @@ import { CreateUserCommand } from '../create-user.command';
 import * as eventBusInterface from 'src/lib';
 import { SnowflakeService } from 'src/services/snowflake.service';
 import { EVENT_BUS } from 'src/event-bus/event-bus.module';
-import { Inject } from '@nestjs/common';
+import { ConflictException, Inject } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    private prisma: PrismaService, 
+    private prisma: PrismaService,
     private snowflake: SnowflakeService,
     @Inject(EVENT_BUS) private eventBus: eventBusInterface.IEventBus
-    ) {}
+  ) { }
 
   async execute(command: CreateUserCommand) {
-    // let user = await  this.prisma.user.findUnique({ where: { email : command.email } });
-    // if (user) return new ConflictException("User already exists");
-
+    // Hash password
+    const hashedPassword = await bcrypt.hash(command.password, Number(process.env.PASSWORD_SALT_ROUNDS) ?? 10);
     // can be create
-    let user = await this.prisma.user.create({
-      data: {
-        id: this.snowflake.generate(),
-        username: command.username,
-        email: command.email,
-        password: command.password,
-      },
-    });
+    let user;
+    try {
+      user = await this.prisma.user.create({
+        data: {
+          id: this.snowflake.generate(),
+          username: command.username,
+          email: command.email,
+          password: hashedPassword,
+        },
+      });
+    } catch (e) {
+      if (e.code === 'P2002') {
+        throw new ConflictException('Username or email already exists.');
+      }
+    }
 
     await this.eventBus.publish('user.created', {
-      id: user.id,
+      id: this.snowflake.toString(user.id),
       username: user.username,
       email: user.email,
     });

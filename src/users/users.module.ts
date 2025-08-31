@@ -12,6 +12,7 @@ import { DeleteUserHandler } from './cqrs/commands/handlers/delete-user.handler'
 import { CheckLoginBotHandler } from './cqrs/queries/handler/check-login-bot.handler';
 import { CheckLoginHandler } from './cqrs/queries/handler/check-login.handler';
 import { SearchUsersHandler } from './cqrs/queries/handler/search-users.handler';
+import { ResponseFormatterService } from 'src/services/response-formatter.service';
 
 @Module({
   imports: [
@@ -23,8 +24,7 @@ import { SearchUsersHandler } from './cqrs/queries/handler/search-users.handler'
     PrismaService,
     RedisService,
     SnowflakeService,
-    UpdateUserHandler,
-    GetUserHandler,
+    ResponseFormatterService,
     // CQRS
     // Commands
     CreateUserHandler,

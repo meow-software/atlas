@@ -11,18 +11,26 @@ export class GetUserHandler implements IQueryHandler<GetUserQuery> {
 
     async execute(query: GetUserQuery) {
         let { id, full } = query;
-        const key = `user:${id}`;
-        if (!full) {
-            const cached = await this.redis.get(key);
-            if (cached) return JSON.parse(cached);
-        }
+        const key = `user:${id}`; // Todo mettre la bonne cle et le bon ttl
+        let user, cached;
 
-        let _id = this.snowflake.toBigInt(id);
-        const select = full
-            ? { id: true, username: true, email: true, bio: true, avatar_url: true, createdAt: true, deleted: true }
-            : { id: true, username: true, avatar_url: true, createdAt: true, deleted: true };
-        const user = await this.prisma.user.findUnique({ where: { id: _id }, select });
-        if (!full && user) await this.redis.set(key, JSON.stringify(user), this.CACHE_TTL);
+        if (!full) cached = await this.redis.get(key);
+
+        if (cached) user = JSON.parse(cached);
+        else {
+            let _id = this.snowflake.toBigInt(id);
+            const select = full
+                ? { id: true, username: true, email: true, isBot: true }
+                : { id: true, username: true };
+                
+            user = await this.prisma.user.findUnique({ where: { id: _id }, select });
+            if (!full && user) {
+                cached = { ...user, id: this.snowflake.toString(user.id) };
+                cached = JSON.stringify(cached);
+            } // cached is already null
+        }
+        // Refresh cache with old data of user or new data of user
+        if (cached) await this.redis.set(key, cached, this.CACHE_TTL);
         return user;
     }
 }

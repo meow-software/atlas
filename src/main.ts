@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { ResponseFormatterInterceptor } from './interceptor/response-formatter.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.useGlobalInterceptors(app.get(ResponseFormatterInterceptor));
   const port = process.env.ATLAS_PORT ?? 3002;
   await app.listen(port);
   console.log(`Atlas service listening on port ${port}.`);

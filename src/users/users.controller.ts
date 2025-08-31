@@ -13,16 +13,22 @@ import { CheckLoginDto } from './dto/check-login.dto';
 import { CheckLoginBotDto } from './dto/check-login-bot.dto';
 import { CheckLoginBotQuery } from './cqrs/queries/check-login-bot.query';
 import { CheckLoginQuery } from './cqrs/queries/check-login.query';
+import { ResponseFormatterService } from 'src/services/response-formatter.service';
+import { GetUserDto } from './dto/get-user.dto';
 
 @Controller('users')
 export class UsersController {
-    constructor(private commandBus: CommandBus, private queryBus: QueryBus) { }
+    constructor(
+        private commandBus: CommandBus,
+        private queryBus: QueryBus,
+        private responseFormatter: ResponseFormatterService
+    ) { }
     @Post()
     async create(@Body() dto: CreateUserDto) {
         return this.commandBus.execute(
             new CreateUserCommand(dto.username, dto.email, dto.password),
         );
-    }    
+    }
     @Post("check/login")
     async checkLogin(@Body() dto: CheckLoginDto) {
         return this.commandBus.execute(
@@ -55,8 +61,9 @@ export class UsersController {
     }
 
     @Get(':id')
-    async getPublic(@Param('id') id: string) {
-        return this.queryBus.execute(new GetUserQuery(id, false));
+    async getPublic(@Param('id') id: string, @Query() query: GetUserDto) {
+        console.log("--ful", query.full)
+        return this.queryBus.execute(new GetUserQuery(id, query.full));
     }
 
     @Get()
