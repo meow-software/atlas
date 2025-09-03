@@ -31,13 +31,13 @@ export class UsersController {
     }
     @Post("check/login")
     async checkLogin(@Body() dto: CheckLoginDto) {
-        return this.commandBus.execute(
+        return this.queryBus.execute(
             new CheckLoginQuery(dto.usernameOrEmail, dto.password),
         );
     }
     @Post("check/login/bot")
     async checkLoginBot(@Body() dto: CheckLoginBotDto) {
-        return this.commandBus.execute(
+        return this.queryBus.execute(
             new CheckLoginBotQuery(dto.id, dto.token),
         );
     }
